@@ -23,7 +23,7 @@
                 </button>
             </div>
             <div class="p-4 pt-5">
-                <h1><a href="/users" class="logo">KPI ACT</a></h1>
+                <h1><a href="/dashboard" class="logo">KPI ACT</a></h1>
                 <br>
                 <br>
                 <ul class="list-unstyled components mb-5">
@@ -39,7 +39,7 @@
                                     @csrf
                                     <button type="submit" class="dropdown-item">Logout</button>
                                 </form>
-                            </li>
+                           </li>
                         </ul>
                     </li>
 
@@ -53,42 +53,39 @@
                                 <a class="nav-link @yield('january')" aria-current="page" href="{{ url('januarys') }}">January</a>
                             </li>
                             <li>
-                                <a href="#">February</a>
+                                <a class="nav-link @yield('february')" aria-current="page" href="{{ url('februarys') }}">February</a>
                             </li>
                             <li>
-                                <a href="#">March</a>
+                                <a class="nav-link @yield('march')" aria-current="page" href="{{ url('marchs') }}">March</a>
                             </li>
                             <li>
-                                <a href="#">April</a>
+                                <a class="nav-link @yield('april')" aria-current="page" href="{{ url('aprils') }}">April</a>
                             </li>
                             <li>
-                                <a href="#">Mei</a>
+                                <a class="nav-link @yield('mei')" aria-current="page" href="{{ url('meis') }}">May</a>
                             </li>
                             <li>
-                                <a href="#">June</a>
+                                <a class="nav-link @yield('june')" aria-current="page" href="{{ url('junes') }}">June</a>
                             </li>
                             <li>
-                                <a href="#">July</a>
+                                <a class="nav-link @yield('july')" aria-current="page" href="{{ url('julys') }}">July</a>
                             </li>
                             <li>
-                                <a href="#">August</a>
+                                <a class="nav-link @yield('august')" aria-current="page" href="{{ url('augusts') }}">August</a>
                             </li>
                             <li>
-                                <a href="#">September</a>
+                                <a class="nav-link @yield('september')" aria-current="page" href="{{ url('septembers') }}">September</a>
                             </li>
                             <li>
-                                <a href="#">October</a>
+                                <a class="nav-link @yield('obtober')" aria-current="page" href="{{ url('octobers') }}">October</a>
                             </li>
                             <li>
-                                <a href="#">November</a>
+                                <a class="nav-link @yield('november')" aria-current="page" href="{{ url('novembers') }}">November</a>
                             </li>
                             <li>
-                                <a href="#">December</a>
+                                <a class="nav-link @yield('december')" aria-current="page" href="{{ url('decembers') }}">December</a>
                             </li>
                         </ul>
-                    </li>
-                    <li>
-                        <a href="#">Summary</a>
                     </li>
                 </ul>
 

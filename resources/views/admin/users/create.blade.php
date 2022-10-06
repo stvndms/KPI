@@ -43,7 +43,6 @@ active
                 <strong>Role:</strong>
                 <select class="form-control" name="role">
                     <option value="admin">Admin</option>
-                    <option value="hrd">HRD</option>
                     <option value="user">User</option>
                 </select>
             </div>

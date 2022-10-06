@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\February;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FebruaryController extends Controller
 {
@@ -13,7 +16,9 @@ class FebruaryController extends Controller
      */
     public function index()
     {
-        return view('admin.february.index');
+        $february = February::paginate(5);
+
+        return view('admin.february.index', compact('february'));
     }
 
     /**
@@ -23,7 +28,8 @@ class FebruaryController extends Controller
      */
     public function create()
     {
-        //
+        $user = User::all();
+        return view('admin.february.create', compact('user', $user));
     }
 
     /**
@@ -34,16 +40,27 @@ class FebruaryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'name' => 'required',
+            'image' => 'image|file|max:3072',
+        ]);
+
+        if ($request->file('image')) {
+            $validate['image'] = $request->file('image')->store('feb-images');
+        }
+
+        February::create($validate);
+
+        return redirect()->route('februarys.index')
+            ->with('success', 'Berhasil Menyimpan !');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(February $february)
     {
         //
     }
@@ -51,34 +68,54 @@ class FebruaryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(February $february)
     {
-        //
+        $user = User::all();
+        return view('admin.february.edit', compact('february', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, February $february)
     {
-        //
+        $validate = $request->validate([
+            'name' => 'required',
+            'image' => 'image|file|max:3072',
+        ]);
+
+        if ($request->file('image')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            $validate['image'] = $request->file('image')->store('feb-images');
+        }
+        $february->update($validate);
+
+
+        return redirect()->route('februarys.index')
+            ->with('success', 'Berhasil Update !');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(February $february)
     {
-        //
+        if ($february->image) {
+            Storage::delete($february->image);
+        }
+        $february->delete();
+
+        return redirect()->route('februarys.index')
+            ->with('success', 'Berhasil Hapus !');
     }
 }

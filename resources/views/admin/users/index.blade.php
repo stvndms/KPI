@@ -8,7 +8,7 @@ active
 
 <!-- Table -->
 <div class="container">
-    <div class="row mb-3">
+    <div class="row mb-3 text-start">
         <br>
         <table class="table table-striped table-hover mt-3">
             <thead class="text-center">
@@ -29,9 +29,9 @@ active
                     <th scope="col">Action</th>
                 </tr>
             </thead>
-            @foreach ($user as $users)
+            @foreach ($user as $key => $users)
             <tbody>
-                <td>{{ ++$i }}</td>
+                <td>{{ $user->firstItem() + $key }}</td>
                 <td>{{ $users->username }}</td>
                 <td>{{ $users->password }}</td>
                 <td>{{ $users->role}}</td>
@@ -49,6 +49,19 @@ active
             </tbody>
             @endforeach
         </table>
+        <div>
+            Showing
+            {{ $user->firstItem() }}
+            to
+            {{ $user->lastItem() }}
+            of
+            {{ $user->total() }}
+            entries
+        </div>
+        <div class="d-flex justify-content-end">
+            {{ $user->links() }}
+
+        </div>
     </div>
 </div>
 <!-- Table -->

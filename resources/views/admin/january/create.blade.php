@@ -30,23 +30,10 @@ active
                 </select>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 mt-3">
-            <div class="form-group">
-                <strong>Ach:</strong>
-                <input type="number" name="ach" class="form-control" placeholder="Ach">
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 mt-3">
-            <div class="form-group">
-                <strong>%:</strong>
-                <input type="number" name="persen" class="form-control" placeholder="%">
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 mt-3">
-            <div class="form-group">
-                <strong>Points:</strong>
-                <input type="number" name="points" class="form-control" placeholder="Points">
-            </div>
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Input Image</label>
+            <img class="img-preview img-fluid mb-3 col-sm-4">
+            <input class="form-control" type="file" name="image" id="image" onchange="previewImage()">
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 text-center mt-5">
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -54,5 +41,24 @@ active
     </div>
 
 </form>
+
+<script>
+    function previewImage(){
+
+        const image = document.querySelector('#image');
+        const imgPreview = document.querySelector('.img-preview')
+        imgPreview.style.display = 'block';
+
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent){
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+
+
+
+</script>
 
 @endsection

@@ -23,7 +23,7 @@
                 </button>
             </div>
             <div class="p-4 pt-5">
-                <h1><a href="index.html" class="logo">Plaza</a></h1>
+                <h1><a href="/dashboard" class="logo">KPI ACT</a></h1>
                 <br>
                 <br>
                 <ul class="list-unstyled components mb-5">
@@ -31,9 +31,6 @@
                     <li>
                         <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Welcome Back!, {{ auth()->user()->name}}</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a href="#">User</a>
-                            </li>
                             <li>
                                 <form action="/logout" method="post">
                                     @csrf
@@ -50,46 +47,46 @@
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">KPI</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                             <li>
-                                <a href="#">January</a>
+                                <a class="nav-link @yield('january')" aria-current="page" href="{{ url('jans') }}">January</a>
                             </li>
                             <li>
-                                <a href="#">February</a>
+                                <a class="nav-link @yield('february')" aria-current="page" href="{{ url('febs') }}">february</a>
                             </li>
                             <li>
-                                <a href="#">March</a>
+                                <a class="nav-link @yield('march')" aria-current="page" href="{{ url('mars') }}">March</a>
                             </li>
                             <li>
-                                <a href="#">April</a>
+                                <a class="nav-link @yield('april')" aria-current="page" href="{{ url('aprs') }}">April</a>
                             </li>
                             <li>
-                                <a href="#">Mei</a>
+                                <a class="nav-link @yield('may')" aria-current="page" href="{{ url('mays') }}">May</a>
                             </li>
                             <li>
-                                <a href="#">June</a>
+                                <a class="nav-link @yield('june')" aria-current="page" href="{{ url('juns') }}">June</a>
                             </li>
                             <li>
-                                <a href="#">July</a>
+                                <a class="nav-link @yield('july')" aria-current="page" href="{{ url('juls') }}">July</a>
                             </li>
                             <li>
-                                <a href="#">August</a>
+                                <a class="nav-link @yield('august')" aria-current="page" href="{{ url('augs') }}">August</a>
                             </li>
                             <li>
-                                <a href="#">September</a>
+                                <a class="nav-link @yield('september')" aria-current="page" href="{{ url('seps') }}">September</a>
                             </li>
                             <li>
-                                <a href="#">October</a>
+                                <a class="nav-link @yield('october')" aria-current="page" href="{{ url('octs') }}">October</a>
                             </li>
                             <li>
-                                <a href="#">November</a>
+                                <a class="nav-link @yield('november')" aria-current="page" href="{{ url('novs') }}">November</a>
                             </li>
                             <li>
-                                <a href="#">December</a>
+                                <a class="nav-link @yield('december')" aria-current="page" href="{{ url('decs') }}">December</a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#">Summary</a>
-                    </li>
+                    </li> -->
                 </ul>
 
                 <!-- <div class="mb-5">

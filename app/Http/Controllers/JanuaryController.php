@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Nilai;
+use App\Models\january;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JanuaryController extends Controller
 {
@@ -15,10 +16,9 @@ class JanuaryController extends Controller
      */
     public function index()
     {
-        $january = Nilai::latest()->paginate(5);
+        $january = January::paginate(5);
 
-        return view('admin.january.index', compact('january'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('admin.january.index', compact('january'));
     }
 
     /**
@@ -40,14 +40,16 @@ class JanuaryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validate = $request->validate([
             'name' => 'required',
-            'ach' => 'required',
-            'persen' => 'required',
-            'points' => 'required',
+            'image' => 'image|file|max:3072',
         ]);
 
-        Nilai::create($request->all());
+        if ($request->file('image')) {
+            $validate['image'] = $request->file('image')->store('jan-images');
+        }
+
+        january::create($validate);
 
         return redirect()->route('januarys.index')
             ->with('success', 'Berhasil Menyimpan !');
@@ -58,7 +60,7 @@ class JanuaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Nilai $january)
+    public function show(January $january)
     {
         //
     }
@@ -69,7 +71,7 @@ class JanuaryController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function edit(Nilai $january)
+    public function edit(January $january)
     {
         $user = User::all();
         return view('admin.january.edit', compact('january', 'user'));
@@ -81,16 +83,21 @@ class JanuaryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Nilai $january)
+    public function update(Request $request, January $january)
     {
-        $request->validate([
+        $validate = $request->validate([
             'name' => 'required',
-            'ach' => 'required',
-            'persen' => 'required',
-            'points' => 'required',
+            'image' => 'image|file|max:3072',
         ]);
 
-        $january->update($request->all());
+        if ($request->file('image')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            $validate['image'] = $request->file('image')->store('post-images');
+        }
+        $january->update($validate);
+
 
         return redirect()->route('januarys.index')
             ->with('success', 'Berhasil Update !');
@@ -101,8 +108,11 @@ class JanuaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Nilai $january)
+    public function destroy(January $january)
     {
+        if ($january->image) {
+            Storage::delete($january->image);
+        }
         $january->delete();
 
         return redirect()->route('januarys.index')

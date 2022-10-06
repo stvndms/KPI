@@ -7,7 +7,7 @@ active
 @section('content')
 <!-- Page Content  -->
 <div class="container">
-    <div class="row mb-3">
+    <div class="row mb-3 text-start">
         <br>
         <table class="table table-striped table-hover mt-3">
             <thead class="text-start">
@@ -23,19 +23,18 @@ active
                 <tr>
                     <th scope="col">NO</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Ach</th>
-                    <th scope="col">%</th>
-                    <th scope="col">Points</th>
+                    <th scope="col">Image</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
-            @foreach ($january as $januarys)
+            @foreach ($january as $key => $januarys)
             <tbody>
-                <td>{{ ++$i }}</td>
+                <td>{{ $january->firstItem() + $key }}</td>
                 <td>{{ $januarys->name }}</td>
-                <td>{{ $januarys->ach }}</td>
-                <td>{{ $januarys->persen}}</td>
-                <td>{{ $januarys->points}}</td>
+                <td>
+                    <img src="{{ asset('storage/' . $januarys->image) }}" alt="" style="width: 70px;">
+
+                </td>
                 <td>
                     <form action="{{ route('januarys.destroy',$januarys->id) }}" method="POST">
 
@@ -50,6 +49,19 @@ active
             </tbody>
             @endforeach
         </table>
+         <div>
+            Showing
+            {{ $january->firstItem() }}
+            to
+            {{ $january->lastItem() }}
+            of
+            {{ $january->total() }}
+            entries
+        </div>
+        <div class="d-flex justify-content-end">
+            {{ $january->links() }}
+
+        </div>
     </div>
 </div>
 

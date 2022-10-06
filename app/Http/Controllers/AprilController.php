@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\April;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AprilController extends Controller
 {
@@ -13,7 +16,9 @@ class AprilController extends Controller
      */
     public function index()
     {
-        return view('admin.april.index');
+        $april = April::paginate(5);
+
+        return view('admin.april.index', compact('april'));
     }
 
     /**
@@ -23,7 +28,8 @@ class AprilController extends Controller
      */
     public function create()
     {
-        //
+        $user = User::all();
+        return view('admin.april.create', compact('user', $user));
     }
 
     /**
@@ -34,16 +40,27 @@ class AprilController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'name' => 'required',
+            'image' => 'image|file|max:3072',
+        ]);
+
+        if ($request->file('image')) {
+            $validate['image'] = $request->file('image')->store('apr-images');
+        }
+
+        April::create($validate);
+
+        return redirect()->route('aprils.index')
+            ->with('success', 'Berhasil Menyimpan !');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(April $april)
     {
         //
     }
@@ -51,34 +68,54 @@ class AprilController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(April $april)
     {
-        //
+        $user = User::all();
+        return view('admin.april.edit', compact('april', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, April $april)
     {
-        //
+        $validate = $request->validate([
+            'name' => 'required',
+            'image' => 'image|file|max:3072',
+        ]);
+
+        if ($request->file('image')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            $validate['image'] = $request->file('image')->store('apr-images');
+        }
+        $april->update($validate);
+
+
+        return redirect()->route('aprils.index')
+            ->with('success', 'Berhasil Update !');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(April $april)
     {
-        //
+        if ($april->image) {
+            Storage::delete($april->image);
+        }
+        $april->delete();
+
+        return redirect()->route('aprils.index')
+            ->with('success', 'Berhasil Hapus !');
     }
 }

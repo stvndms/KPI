@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\June;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JuneController extends Controller
 {
@@ -13,7 +16,10 @@ class JuneController extends Controller
      */
     public function index()
     {
-        return view('admin.june.index');
+        $june = June::paginate(5);
+
+        return view('admin.june.index', compact('june'));
+
     }
 
     /**
@@ -23,7 +29,8 @@ class JuneController extends Controller
      */
     public function create()
     {
-        //
+        $user = User::all();
+        return view('admin.june.create', compact('user', $user));
     }
 
     /**
@@ -34,16 +41,27 @@ class JuneController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'name' => 'required',
+            'image' => 'image|file|max:3072',
+        ]);
+
+        if ($request->file('image')) {
+            $validate['image'] = $request->file('image')->store('june-images');
+        }
+
+        June::create($validate);
+
+        return redirect()->route('junes.index')
+            ->with('success', 'Berhasil Menyimpan !');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(June $june)
     {
         //
     }
@@ -51,34 +69,54 @@ class JuneController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(June $june)
     {
-        //
+        $user = User::all();
+        return view('admin.june.edit', compact('june', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, June $june)
     {
-        //
+        $validate = $request->validate([
+            'name' => 'required',
+            'image' => 'image|file|max:3072',
+        ]);
+
+        if ($request->file('image')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            $validate['image'] = $request->file('image')->store('jun-images');
+        }
+        $june->update($validate);
+
+
+        return redirect()->route('junes.index')
+            ->with('success', 'Berhasil Update !');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(June $june)
     {
-        //
+        if ($june->image) {
+            Storage::delete($june->image);
+        }
+        $june->delete();
+
+        return redirect()->route('junes.index')
+            ->with('success', 'Berhasil Hapus !');
     }
 }
